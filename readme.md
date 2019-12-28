@@ -17,3 +17,6 @@ insert into books(title, author, year) values ('Clean Code: A Handbook of Agile 
 ('Spring Microservices in Action', 'John Carnell', '2017'),
 ('Go Programming Blueprints', 'Mat Ryer', '2016');
 
+*note to future self: use gorm*
+https://github.com/jinzhu/gorm
+
