@@ -14,8 +14,6 @@ import (
  // BookController -> name is s self explanatory
 type BookController struct{}
 
-var books []models.Book
-
 func logFatal(err error) {
 	if err != nil {
 		log.Fatal(err)
@@ -25,10 +23,8 @@ func logFatal(err error) {
 // GetBooks -> get all books
 func (c BookController) GetBooks(db *sql.DB) http.HandlerFunc{
 	return func(writer http.ResponseWriter, request *http.Request) {
-		var book models.Book
-		books = []models.Book{}
 		repo := repository.BookRepository{}
-		books = repo.GetBooks(db, book, books)
+		books := repo.GetBooks(db)
 		json.NewEncoder(writer).Encode(books)
 	}
 }
@@ -36,12 +32,11 @@ func (c BookController) GetBooks(db *sql.DB) http.HandlerFunc{
 // GetBook -> get book by id
 func (c BookController) GetBook(db *sql.DB) http.HandlerFunc{
 	return func (writer http.ResponseWriter, request *http.Request) {
-		var book models.Book
 		params := mux.Vars(request)
 		repo := repository.BookRepository{}
 		id, err := strconv.Atoi(params["id"])
 		logFatal(err)
-		book = repo.GetBook(db, book, id)
+		book := repo.GetBook(db, id)
 		json.NewEncoder(writer).Encode(book)
 	}
 }

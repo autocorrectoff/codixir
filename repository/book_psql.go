@@ -15,13 +15,14 @@ func logFatal(err error) {
 }
 
 // GetBooks -> get all books
-func (b BookRepository) GetBooks(db *sql.DB, book models.Book, books []models.Book) []models.Book{
+func (b BookRepository) GetBooks(db *sql.DB) []models.Book{
 	rows, err := db.Query("select * from books")
 	logFatal(err)
-
+	var books []models.Book
 	defer rows.Close()
 
 	for rows.Next() {
+		var book models.Book
 		err = rows.Scan(&book.ID, &book.Title, &book.Author, &book.Year)
 		logFatal(err)
 		books = append(books, book)
@@ -30,8 +31,9 @@ func (b BookRepository) GetBooks(db *sql.DB, book models.Book, books []models.Bo
 }
 
 // GetBook -> get book by id
-func (b BookRepository) GetBook(db *sql.DB, book models.Book, id int) models.Book{
+func (b BookRepository) GetBook(db *sql.DB, id int) models.Book{
 	row := db.QueryRow("select * from books where id=$1", id)
+	var book models.Book
 	err := row.Scan(&book.ID, &book.Title, &book.Author, &book.Year)
 	logFatal(err)
 	return book
